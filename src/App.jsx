@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 import './App.css'
 
 function App() {
+
+  //Hooks like useState and useEffect allows to hook into react state and give access to life cycle features
+  // without creating any class compoent 
+  
   const [count, setCount] = useState(0)
 
   return (
