@@ -1,61 +1,44 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-import './App.css'
+// Custom hook for fetching todos
+function useTodos() {
+  const [todos, setTodos] = useState([]);
 
+  useEffect(() => {
+    // Fetching todos using Axios
+    axios.get("https://sum-server.100xdevs.com/todos")
+      .then(res => {
+        setTodos(res.data.todos);
+      })
+  }, []);
+
+  // Return the todos state
+  return todos;
+}
+
+// Main App component
 function App() {
-
-  //Hooks like useState and useEffect allows to hook into react state and give access to life cycle features
-  // without creating any class compoent 
-  
-  const [count, setCount] = useState(0)
+  // Using the custom hook to fetch todos
+  const todos = useTodos();
 
   return (
     <>
-      <MyClassComponent />
-
-
+      {/* Rendering Track component for each todo */}
+      {todos.map(todo => <Track key={todo.id} todo={todo} />)}
     </>
-  )
+  );
 }
 
-
-class MyClassComponent extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { count: 0 };
-    //this.state will be the object containing the state
-  }
-
-  incrementCount = () => {
-    this.setState({count:this.state.count + 1});
-  }
-
-  render() {
-    return <div>
-      <p>{this.state.count}</p>
-      <button onClick={this.incrementCount}>Increment but from class</button>
-    </div>
-  }
-}
-
-
-
-
-function MyComponent() {
-
-  const [count, setCount] = useState(0);
-
-  const incrementCount = () => {
-    setCount(count + 1);
-  }
-
+// Track component for rendering individual todo
+function Track({ todo }) {
   return (
     <div>
-      <p>{count}</p>
-      <button onClick={incrementCount}>Click Me</button>
+      {todo.title}
+      <br />
+      {todo.description}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
