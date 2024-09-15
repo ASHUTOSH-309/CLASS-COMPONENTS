@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // Custom hook for fetching todos
-function useTodos() {
+function useTodos(n) {
   const [todos, setTodos] = useState([]);
+//Polling Logic Added After n seconds
+  setTimeout(() => {
+    useEffect(() => {
+      // Fetching todos using Axios
+      axios.get("https://sum-server.100xdevs.com/todos")
+        .then(res => {
+          setTodos(res.data.todos);
+        })
+    }, []);
 
-  useEffect(() => {
-    // Fetching todos using Axios
-    axios.get("https://sum-server.100xdevs.com/todos")
-      .then(res => {
-        setTodos(res.data.todos);
-      })
-  }, []);
+  }, n * 1000)
 
   // Return the todos state
   return todos;
@@ -20,7 +23,7 @@ function useTodos() {
 // Main App component
 function App() {
   // Using the custom hook to fetch todos
-  const todos = useTodos();
+  const todos = useTodos(5);
 
   return (
     <>
